@@ -1,0 +1,8 @@
+{
+  "name": "aihl-feed",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.50.0"
+  }
+}
