@@ -2,7 +2,11 @@ import { chromium } from "playwright";
 import fs from "fs";
 
 const URL =
-  "https://www.theaihl.com/leagues/schedules.cfm?clientid=3856&leagueID=11464&schedType=main&printPage=0";
+  "https://www.theaihl.com/leagues/schedules.cfm?clientid=3856&leagueID=11464&schedType=main&printPage=1";
+
+function clean(s) {
+  return String(s ?? "").replace(/\s+/g, " ").trim();
+}
 
 (async () => {
   const browser = await chromium.launch();
@@ -10,31 +14,14 @@ const URL =
 
   await page.goto(URL, { waitUntil: "networkidle", timeout: 120000 });
 
-  const games = await page.evaluate(() => {
-    const links = Array.from(document.querySelectorAll('a[href*="gameID="]'));
-    const seen = new Set();
-    const out = [];
-
-    for (const a of links) {
-      const href = a.getAttribute("href") || "";
-      const m = href.match(/gameID=(\d+)/i);
-      if (!m) continue;
-
-      const gameId = m[1];
-      if (seen.has(gameId)) continue;
-      seen.add(gameId);
-
-      const container =
-        a.closest("tr, .row, .game, .card, li, div") || a.parentElement;
-
-      const text = (container?.innerText || a.innerText || "")
-        .replace(/\s+/g, " ")
-        .trim();
-
-      out.push({ gameId, raw: text });
-    }
-
-    return out;
+  // Pull the first HTML table on the page (print view is usually a simple table)
+  const rows = await page.evaluate(() => {
+    const table = document.querySelector("table");
+    if (!table) return [];
+    const trs = Array.from(table.querySelectorAll("tr"));
+    return trs.map(tr =>
+      Array.from(tr.querySelectorAll("th,td")).map(td => td.innerText.trim())
+    );
   });
 
   await browser.close();
@@ -42,11 +29,11 @@ const URL =
   const payload = {
     updatedAt: new Date().toISOString(),
     source: URL,
-    games,
+    table: rows
   };
 
   fs.mkdirSync("docs", { recursive: true });
   fs.writeFileSync("docs/schedule.json", JSON.stringify(payload, null, 2), "utf8");
 
-  console.log(`Wrote ${games.length} games`);
+  console.log(`Wrote table rows: ${rows.length}`);
 })();
