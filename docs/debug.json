@@ -1,9 +1,12 @@
 {
   "updatedAt": "2026-03-03T05:38:25.035Z",
   "source": "https://theaihl.com/leagues/print_schedule.cfm?clientID=3856&leagueID=11464&mixed=1&teamID=0",
-  "meta": {
+  "finalUrl": "https://theaihl.com/leagues/print_schedule.cfm?clientID=3856&leagueID=11464&mixed=1&teamID=0",
+  "httpStatus": 403,
+  "title": "403 Forbidden",
+  "note": "",
+  "tableMeta": {
     "note": "No tables found",
     "pageTextPreview": "403 Forbidden"
-  },
-  "table": []
+  }
 }
