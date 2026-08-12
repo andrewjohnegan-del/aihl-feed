@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-08-12T17:37:40.483Z",
+  "updatedAt": "2026-08-12T18:32:28.172Z",
   "source": "https://theaihl.com/leagues/print_schedule.cfm?clientID=3856&leagueID=11464&mixed=1&teamID=0",
   "finalUrl": "https://theaihl.com/leagues/print_schedule.cfm?clientID=3856&leagueID=11464&mixed=1&teamID=0",
-  "httpStatus": 403,
+  "httpStatus": 202,
   "title": "403 Forbidden",
   "note": "",
   "tableMeta": {
